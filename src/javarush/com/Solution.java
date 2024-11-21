@@ -1,11 +1,5 @@
 package javarush.com;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-
 public class Solution {
 
     public static void main(String[] args) {
