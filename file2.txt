@@ -3,3 +3,4 @@ Some other line
 Some other line2
 Change file2 to chekout practice method
 Line from user2
+another line from user2
