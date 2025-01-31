@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+<p th:text="${person.getFullName() + ', ' + person.getBirthYear()}">VALUE</p>
+
+<!-- Проверяем, есть ли у читателя книги -->
+<ul th:if="${books.size() > 0}">
+    <li th:each="book : ${books}">
+        <span th:text="${book.title}"></span> - <span th:text="${book.author}"></span>
+        <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.id})}" style="display:inline;">
+            <button type="submit">Освободить</button>
+        </form>
+    </li>
+</ul>
+
+<!-- Если у читателя нет книг, выводим сообщение -->
+<p th:if="${books.size() == 0}">У читателя нет книг.</p>
+
+<!-- Кнопка для освобождения всех книг читателя -->
+<form th:if="${books.size() > 0}" th:method="PATCH" th:action="@{/people/{id}/release-all(id=${person.id})}">
+    <button type="submit">Освободить все книги</button>
+</form>
+
+<br/>
+
+<a th:href="@{/people/{id}/edit(id=${person.getId()})}">Редактировать</a>
+
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Удалить"/>
+
+</form>
+
+<a href="/people">Вернуться к списку читателей</a>
+
+</body>
+</html>

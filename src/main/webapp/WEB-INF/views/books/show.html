@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+<h1>Информация о книге</h1>
+
+<p><strong>Название:</strong> <span th:text="${book.title}"></span></p>
+<p><strong>Автор:</strong> <span th:text="${book.author}"></span></p>
+<p><strong>Год:</strong> <span th:text="${book.year}"></span></p>
+
+<!-- Если книга занята, показываем информацию о читателе -->
+<p th:if="${book.personId != null}">
+    <strong>Читатель:</strong>
+    <a th:href="@{/people/{id}(id=${book.personId})}" th:text="${book.personName}"></a>
+</p>
+<p th:if="${book.personId == null}">
+    <strong>Читатель:</strong> Свободна
+</p>
+
+<!-- Если книга свободна, можно назначить читателя -->
+<form th:if="${book.personId == null}" th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.id})}">
+    <label for="personId">Назначить читателя:</label>
+    <select id="personId" name="personId">
+        <option th:each="person : ${people}" th:value="${person.id}" th:text="${person.fullName}"></option>
+    </select>
+    <button type="submit">Назначить</button>
+</form>
+
+<!-- Если книга занята, можно освободить её -->
+<form th:if="${book.personId != null}" th:method="PATCH" th:action="@{/books/{id}/release(id=${book.id})}">
+    <button type="submit">Освободить книгу</button>
+</form>
+
+<br/>
+
+<a th:href="@{/books/{id}/edit(id=${book.id})}">Редактировать</a>
+
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.id})}" style="display:inline;">
+    <input type="submit" value="Удалить">
+</form>
+
+<a href="/books">Вернуться к списку книг</a>
+
+</body>
+</html>

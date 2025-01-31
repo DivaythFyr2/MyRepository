@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список книг</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .actions {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Список книг</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Автор</th>
+        <th>Год</th>
+        <th>Читатель</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.year}"></td>
+        <td>
+            <span th:if="${book.personName != null}" th:text="${book.personName}"></span>
+            <span th:if="${book.personName == null}">Свободна</span>
+        </td>
+        <td class="actions">
+            <a th:href="@{/books/{id}(id=${book.id})}">Просмотр</a>
+            <a th:href="@{/books/{id}/edit(id=${book.id})}">Редактировать</a>
+            <form th:method="DELETE" th:action="@{/books/{id}(id=${book.id})}" style="display:inline;">
+                <button type="submit">Удалить</button>
+            </form>
+
+            <form th:if="${book.personId == null}" th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.id})}" style="display:inline;">
+                <select name="personId">
+                    <option th:each="person : ${people}" th:value="${person.id}" th:text="${person.fullName}"></option>
+                </select>
+                <button type="submit">Назначить</button>
+            </form>
+
+            <form th:if="${book.personId != null}" th:method="PATCH" th:action="@{/books/{id}/release(id=${book.id})}" style="display:inline;">
+                <button type="submit">Освободить</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a href="/books/new">Добавить новую книгу</a>
+
+</body>
+</html>
